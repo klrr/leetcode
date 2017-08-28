@@ -1,0 +1,87 @@
+561.	Array Partition I
+Given an array of 2n integers, your task is to group these integers into n pairs of integer, 
+say (a1, b1), (a2, b2), ..., (an, bn) which makes sum of min(ai, bi) for all i from 1 to n as large as possible.
+排序之后，取偶数索引对应的值
+class Solution {
+public:
+    int arrayPairSum(vector<int>& nums) {
+        int sum = 0, len = nums.size();
+        sort(nums.begin(), nums.end());
+        for(int i=0; i<len; i+=2){
+            sum += nums[i];
+        }
+        return sum;
+    }
+};
+
+566. Reshape the Matrix
+In MATLAB, there is a very useful function called 'reshape', which can reshape a matrix into a new one with different size
+but keep its original data.
+处理非法输入
+使用除法和取余
+class Solution {
+public:
+    vector<vector<int>> matrixReshape(vector<vector<int>>& nums, int r, int c) {
+        int row = nums.size(), col = nums[0].size();
+        if(row*col != r*c) return nums;
+        vector<vector<int>> res(r, vector<int>(c));
+        for(int i=0; i<row*col; i++){
+            res[i/c][i%c] = nums[i/col][i%col];
+        }
+       return res;
+    }
+};
+
+485. Max Consecutive Ones
+Given a binary array, find the maximum number of consecutive 1s in this array.
+使用贪心法，使用一个计数器，遇0则0，遇1则+1，返回值res不断取最大的cnt
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int res=0, cnt=0;
+        for(auto v : nums){
+            cnt = (v == 0) ? 0 : cnt + 1;
+            res = max(res, cnt);
+        }
+        return res;
+    }
+};
+
+448. Find All Numbers Disappeared in an Array
+Given an array of integers where 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
+Find all the elements of [1, n] inclusive that do not appear in this array.
+Could you do it without extra space and in O(n) runtime? You may assume the returned list does not count as extra space.
+两次遍历
+第一次遍历将数据值对应索引位置的值取反
+第二次遍历查询并返回数组值为正的（索引+1）
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        for(int i = 0; i < nums.size(); i++){
+            int pos = abs(nums[i])-1;
+            nums[pos] = (nums[pos] > 0) ? -nums[pos] : nums[pos];
+        }
+        vector<int> res;
+        for(int i =0; i < nums.size(); i++){
+            if(nums[i] > 0) res.push_back(i+1);
+        }
+        return res;
+    }
+};
+
+283. Move Zeroes
+Given an array nums, write a function to move all 0's to the end of it while maintaining the relative order of the non-zero elements.
+For example, given nums = [0, 1, 0, 3, 12], after calling your function, nums should be [1, 3, 12, 0, 0].
+使用两个标志，一个标志用于向后搜索非0值，一个标志记录最左边的0值
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        for(int i = 0, j = 0; i < nums.size(); i++){
+            if(nums[i]){
+                swap(nums[i], nums[j++]);
+            }
+        }
+    }
+};
+
+
